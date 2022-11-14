@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.lyshark.com/javascript/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.lyshark.com/javascript/echarts/5.0.0/echarts.min.js"></script>
     <title>Document</title>
     <style>
         * {
@@ -97,11 +99,21 @@
          var username = document.getElementById("username").value;
          var password = document.getElementById("password").value;
         //窗口弹出input文本框输入的值
-         var data = {
-             'username':username,
-             'password': password
-         }
-         alert(data);
+            $.ajax({
+              url: "http://127.0.0.1:5000/admin/login?username="+username+"&&password="+password,
+              data:"",
+              contentType:'application/json;charset=utf-8',
+              type: 'get',
+              dataType: 'json',
+             success(data){
+                  if(data.code==0){
+                      alert("登陆成功")
+                        top.location.href = "http://127.0.0.1:5000//chart/mydata";
+                  }else{
+                      alert("登陆失败")
+                  }
+              }
+          })
 
     }
 

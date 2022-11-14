@@ -232,5 +232,5 @@ def register():
 
 
 if __name__ == '__main__':
-    app.register_blueprint(api_url_user, url_prefix='/user/admin')
+    app.register_blueprint(api_url_user, url_prefix='/admin')
     app.run()
