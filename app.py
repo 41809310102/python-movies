@@ -16,13 +16,18 @@ app = Flask(import_name=__name__,
 
 # 加载爬取的网站数据
 def read_file():
-    with open("service/moviesky.txt", "r") as f:  # 打开文件
+    with open("service/moviesky.txt", "r", encoding="utf-8") as f:  # 打开文件
         line = f.readline()  # 调用文件的 readline()方法，一次读取一行
         while line:
             res = eval(str(line))
             movice.append(res)
             line = f.readline()
         f.close()
+
+
+@app.route('/lay.html')
+def moban():
+    return render_template("lay.html")
 
 
 # 统计电影类别数
