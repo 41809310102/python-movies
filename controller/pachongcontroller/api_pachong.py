@@ -3,6 +3,7 @@ import time
 from dao.Movie import Movie
 from mapper import movieMapper
 
+
 movice = []
 
 
@@ -24,7 +25,7 @@ def get_insert_data():
     for obj in movice:
         count = 1
         for type in type_list:
-            if str(obj['type']).find(type)!=-1:
+            if str(obj['type']).find(type) != -1:
                 node = Movie()
                 node.setMovie_type(count)
                 node.setMovie_title(obj['title'])
@@ -73,5 +74,8 @@ def get_time_long(time_data):
     return time_long
 
 
-if __name__ == '__main__':
+# 将电影天堂爬好的数据保存在数据库中
+def insert_mysql():
     get_insert_data()
+
+

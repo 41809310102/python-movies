@@ -5,6 +5,9 @@ import time
 import requests
 import xlwt  # 进行excel操作
 from bs4 import BeautifulSoup  # 网页解析，获取数据
+# 生成词云数据
+from wordcloud import WordCloud
+import xlrd
 
 # 1.获取影片超链接的规则
 findLink = re.compile(r'<a href="(.*?)">')  # 生成正则表达式对象，表示规则（字符串的模式）
@@ -102,7 +105,7 @@ def getData(baseurl):
             data.append(bd.strip())  # 去空格
             num += 1  # 呼号
             # 将一部电影信息添加到电影列表
-            print(data) #在控制台上打印
+            print(data)  # 在控制台上打印
             datalist.append(data)
 
     # 测试：在控制台打印信息
@@ -124,8 +127,6 @@ def saveData(datalist, savepath):
             sheet.write(i + 1, j, data[j])  # 数据
 
     book.save(savepath)  # 保存
-
-
 
 
 # 2.解析html
@@ -152,9 +153,35 @@ def main():
     saveData(datalist, savepath)  # 保存数据到Excel
 
 
+# 获取top10信息
+def getap10_douban():
+    # 电影top10
+    data = xlrd.open_workbook('./豆瓣.xls')
+
+    table = data.sheets()[0]
+    # nrows = table.nrows  # 行数
+    #
+    # ncols = table.ncols  # 列数
+    arr_name = []
+    for i in range(1, 11):
+        row = table.row_values(i)  # 某一行数据
+        arr_name.append(row[3])
+    return arr_name
+
+
+def getcloud_chart():
+    w = WordCloud(background_color="white", font_path="./SimplifiedChinese/SourceHanSerifSC-SemiBold.otf")  # font_path="msyh.ttc"，设置字体，否则显示不出来
+    text = ''
+    data = getap10_douban()
+    for s in data:
+        text += s+"\n"
+    w.generate(text)
+    w.to_file("pywcloud.png")
+
+
 # 豆瓣电影程序入口（主方法）
 if __name__ == "__main__":
     # 调用函数
-    main()
-    # init_db("movieTest.db")   # 测试数据库建立
+    # main()
+    getcloud_chart()
     print("爬取完毕")
