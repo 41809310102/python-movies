@@ -48,8 +48,7 @@
                         <a href="javascript:;">电影数据</a>
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;"  data-src="/chart/mydata">数据分析</a></dd>
-                            <dd><a href="javascript:;"  data-src="/admin/list?username=null">电影列表</a></dd>
-                              <dd><a href="javascript:;" >数据爬取</a></dd>
+                            <dd><a href="javascript:;"  data-src="/film/list?title=null">电影列表</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -76,7 +75,9 @@
     isroot()
     function isroot(){
         console.log(window.sessionStorage.getItem( "root" ))
+        console.log(window.sessionStorage.getItem( "user" ))
         if(window.sessionStorage.getItem( "root" )=="1"){
+
               document.getElementById("user-admin").style.display="none"; //隐藏
         }
     }

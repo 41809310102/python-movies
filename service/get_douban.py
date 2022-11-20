@@ -50,7 +50,7 @@ def getData(baseurl):
     datalist = []  # 创建电影列表
     for i in range(0, 10):  # 调用获取页面信息的函数，10次，25条/页
         url = baseurl + str(i * 25)
-        time.sleep(10)
+        time.sleep(3)
         askURL(url)
         html = askURL(url)  # 保存获取到的网页源码
         # Step2.逐一解析数据
@@ -102,9 +102,10 @@ def getData(baseurl):
             data.append(bd.strip())  # 去空格
             num += 1  # 呼号
             # 将一部电影信息添加到电影列表
+            print(data) #在控制台上打印
             datalist.append(data)
 
-    print(datalist)  # 测试：在控制台打印信息
+    # 测试：在控制台打印信息
     return datalist
 
 
@@ -125,15 +126,6 @@ def saveData(datalist, savepath):
     book.save(savepath)  # 保存
 
 
-# Step0.程序执行时
-def main():
-    print("开始爬取豆瓣电影...")
-    baseurl = "https://movie.douban.com/top250?start="
-    # Step1.爬取网页；Step2.逐一解析数据
-    datalist = getData(baseurl)
-    savepath = "./豆瓣.xls"
-    # Step3.保存数据
-    saveData(datalist, savepath)  # 保存数据到Excel
 
 
 # 2.解析html
@@ -160,7 +152,7 @@ def main():
     saveData(datalist, savepath)  # 保存数据到Excel
 
 
-# 程序入口（主方法）
+# 豆瓣电影程序入口（主方法）
 if __name__ == "__main__":
     # 调用函数
     main()

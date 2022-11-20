@@ -6,10 +6,12 @@ def create_page(num, limit, data):
         end = len_s
     arr_list = []
     count = 0
+    print(start,end)
     for node in data:
         if count < start - 1:
             count += 1
         elif start - 1 <= count <= end - 1:
+            count += 1
             arr_list.append(node)
         else:
             break

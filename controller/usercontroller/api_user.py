@@ -37,7 +37,6 @@ def get_list():
         user.setuser_sex(sex)
         user.setuser_root(root)
         user.setuser_createtime(create_time)
-        print(res['id'])
         if res['id'] != 0:
             user.setuser_id(res['id'])
             userMapper.update_info(user)
@@ -54,7 +53,7 @@ def login():
     res = userMapper.select_userisok(username, password)
     print(res)
     if res['code'] != 0:
-        return success.res(res, 1, "登陆成功")
+        return success.res(res['user'], 1, "登陆成功")
     else:
         return success.res("", -1, "登陆失败，请检查用户名密码")
 
@@ -145,7 +144,7 @@ def get_userlist_sreach():
     username = request.args['username']
     ids = request.args['id']
     print("ids", ids)
-    if ids !='':
+    if ids != '':
         list_res = userMapper.select_User(str(ids), username)
         res = create_page(int(page), int(limit), list_res)
         res_data = {
@@ -174,4 +173,51 @@ def del_user():
         'code': 1,
         'msg': "删除成功"
     }
+    return json.dumps(res).encode("utf-8")
+
+
+@api_url_user.route("/update_info", methods=['POST', 'GET'])
+def info_user():
+    id = request.form['id']
+    username = request.form['username']
+    sign = request.form['sign']
+    sex = request.form['sex']
+    res_data = userMapper.user_info(id, username, sign, sex)
+    if res_data == 1:
+        res = {
+            'code': 1,
+            'msg': "修改成功，请退出登陆，查看信息"
+        }
+    else:
+        res = {
+            'code': 0,
+            'msg': "修改失败，请重新尝试"
+        }
+    return json.dumps(res).encode("utf-8")
+
+
+@api_url_user.route("/update_info_pass", methods=['POST', 'GET'])
+def info_user_pass():
+    id = request.form['id']
+    username = request.form['username']
+    oldpassword = request.form['oldpas']
+    newpassword = request.form['newpas']
+    res_isok = userMapper.select_userisok(username, oldpassword)
+    if res_isok['code'] != 0:
+        res_pass = userMapper.user_info_pass(id, username, newpassword)
+        if res_pass == 1:
+            res = {
+                'code': 1,
+                'msg': "修改成功，请退出登陆"
+            }
+        else:
+            res = {
+                'code': 0,
+                'msg': "修改失败，请重新尝试"
+            }
+    else:
+        res = {
+            'code': 0,
+            'msg': "旧密码核验不成功！请重新输入"
+        }
     return json.dumps(res).encode("utf-8")

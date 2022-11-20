@@ -11,7 +11,7 @@
 		style="margin-top: 20px">
 		<legend>查询条件</legend>
 		<div class="layui-form" action="" method="post">
-            <div class="layui-container">
+            <f class="layui-container">
              <div class="layui-row">
                <div class="layui-col-md9">
                 	<div class="layui-form-item">
@@ -40,13 +40,11 @@
 					onclick="sreach()">查询</button>
 					<button type="reset"
 						class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh "
-						lay-filter="submit">重置</button>
+						onclick="isno()">重置</button>
 				</div>
 			</div>
                  </div>
-               </div>
-
-			</div>
+		</div>
 	</fieldset>
 	<!-- 数据表格开始 -->
 	<div class="layui-btn-container" style="display: none;"
@@ -203,7 +201,7 @@
 				var data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'edit') { //查看
-					layer.msg("修改")
+					layer.msg("信息无需展示，可在所在表数据中查看")
 				} else if (layEvent === 'del') { //删除
 					layer.confirm('真的删除行么', function(index) {
 						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -245,20 +243,9 @@
 					}
 				})
 			}
-			//提交重置
-			form.on("submit(doSubmit)",function(obj){
-				//序列化表单数据
-				var param=$('#dateFrm').serialize();
-				$.post(url,param,function(obj){
-					layer.msg("成功");
-					//关闭弹出层
-					layer.close(mainIndex);
-					//刷新数据表格
-					ltableIns.reload(); //回调表格数据
-				})
-			})
 			//弹出层方法 修改页面
 			function openUpdateUser(data) {
+				  console.log(data)
 				  mainIndex=layer.open({
 					type:1,
 					title:'修改用户',
@@ -281,6 +268,25 @@
 			console.log(listurl)
 			getdata()
 		}
+
+		function isno(){
+			let id = document.getElementById("ids");
+			let username = document.getElementById("username");
+			id.value = ""
+			username.value =""
+		}
+				//提交重置
+		  form.on("submit(doSubmit)",function(obj){
+				//序列化表单数据
+				var param=$('#dateFrm').serialize();
+				$.post(url,param,function(obj){
+					layer.msg("成功");
+					//关闭弹出层
+					layer.close(mainIndex);
+					//刷新数据表格
+					ltableIns.reload(); //回调表格数据
+				})
+			})
 	</script>
 </body>
 </html>

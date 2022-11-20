@@ -57,7 +57,7 @@ def select_userisok(username, password):
     password = "\"" + password + "\""
     # 使用cursor()方法获取操作游标
     cursor = db.cursor()
-    sql = "SELECT root FROM  user WHERE username=" + username + "and password=" + password
+    sql = "SELECT * FROM  user WHERE username=" + username + "and password=" + password
     res = {
         'root': 0,
         'code': 0
@@ -66,11 +66,15 @@ def select_userisok(username, password):
         # 执行SQL语句
         cursor.execute(sql)
         # 获取所有记录数量
-        num1 = cursor.fetchall()
-        print("登陆成功")
+        row = cursor.fetchall()
+        if len(row) > 0:
+            node = {'id': row[0][0], 'username': row[0][1], 'password': row[0][2], 'root': row[0][4],
+                    'createtime': row[0][5],
+                    'sex': row[0][3], 'sign': row[0][6]}
+            print("登陆成功")
         res = {
-            'root': num1[0][0],
-            'code': len(num1)
+            'user': node,
+            'code': len(row)
         }
         return res
     except:
@@ -161,6 +165,49 @@ def update_info(user):
         db.close()
 
 
+# 用户信息修改
+def user_info(id, username, sign, sex):
+    db = connectdb()
+    cursor = db.cursor()
+    id = str(id)
+    username = "\"" + username + "\""
+    sex = "\"" + sex + "\""
+    sign = "\"" + sign + "\""
+    try:
+        update = "update user set  username=" + username + ",sign=" + sign + ",sex=" + sex + " where id=" + id
+        cursor.execute(update)
+        print('信息修改成功')
+        db.commit()  # 提交数据
+        return 1
+    except:
+        print('信息修改失败')
+        db.rollback()
+        cursor.close()
+        db.close()
+    return 0
+
+
+# 用户密码修改
+def user_info_pass(id, username, password):
+    db = connectdb()
+    cursor = db.cursor()
+    id = str(id)
+    username = "\"" + username + "\""
+    password = "\"" + password + "\""
+    try:
+        update = "update user set  username=" + username + ",password=" + password + " where id=" + id
+        cursor.execute(update)
+        print('信息修改成功')
+        db.commit()  # 提交数据
+        return 1
+    except:
+        print('信息修改失败')
+        db.rollback()
+        cursor.close()
+        db.close()
+    return 0
+
+
 # 用户信息删除
 def del_user(id):
     db = connectdb()
@@ -174,7 +221,3 @@ def del_user(id):
         db.rollback()
         cursor.close()
         db.close()
-
-
-if __name__ == '__main__':
-    update_userName("wangxiaoming", "1")

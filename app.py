@@ -1,8 +1,10 @@
 import json
 
 from flask import Flask, render_template
+
+from controller.moviecontroller.api_file import api_url_movie
 from controller.usercontroller.api_user import api_url_user
-from service import get_data
+
 
 app = Flask(__name__)
 
@@ -237,4 +239,5 @@ def register():
 
 if __name__ == '__main__':
     app.register_blueprint(api_url_user, url_prefix='/admin')
+    app.register_blueprint(api_url_movie, url_prefix='/film')
     app.run('0.0.0.0', port=5001, debug=False)

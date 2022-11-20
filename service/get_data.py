@@ -32,6 +32,7 @@ def getallpage_url(page):
     urls = html.xpath("//div[@class = 'co_content8']//ul//table//a/@href")
     Movie_url.extend(list(map(lambda url: link + url, urls)))
 
+
 # 获取电影详情
 def get_movie_detail(url):
     movie = {}
@@ -100,6 +101,7 @@ def saveData():
         f.close()
 
 
+# 电影天堂数据爬取主程序
 if __name__ == '__main__':
     print("正在连接网站中.........")
     parse_HTML()

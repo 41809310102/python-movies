@@ -2,7 +2,7 @@ import time
 
 import pymysql
 import config
-from dao.User import User
+
 
 
 def connectdb():
@@ -22,16 +22,18 @@ def closedb(db):
 
 
 # 支持模糊查询
-def select_User(id, username):
+def select_Movie(id, title):
     # 使用cursor()方法获取操作游标
     print("开始查询")
     db = connectdb()
     cursor = db.cursor()
-    username = "\'%" + username + "%\'"
+    title = "\'%" + title + "%\'"
     if id != "-1":
-        sql = "SELECT * FROM user where id=" + id + " and username like " + username
+        sql = "SELECT a.id,a.title,a.douban,b.typename,a.country,a.uptime,a.time_total" \
+              " FROM moviedb as a, movietype as b  where  a.id=" + id + " and a.title like " + title + " and a.type=b.id "
     else:
-        sql = "SELECT * FROM user where username like " + username
+        sql = "SELECT a.id,a.title,a.douban,b.typename,a.country,a.uptime,a.time_total" \
+              " FROM moviedb as a, movietype as b  where" + " a.title like " + title + " and a.type=b.id "
     list = []
     try:
         # 执行SQL语句
@@ -42,8 +44,8 @@ def select_User(id, username):
         list = []
         if len(num1) > 0:
             for row in num1:
-                node = {'id': row[0], 'username': row[1], 'password': row[2], 'root': row[4], 'createtime': row[5],
-                        'sex': row[3]}
+                node = {'id': row[0], 'title': row[1], 'douban': row[2], 'type': row[3], 'country': row[4],
+                        'uptime': row[5], 'time_total': row[6]}
                 list.append(node)
         else:
             return list
@@ -52,43 +54,13 @@ def select_User(id, username):
     return list
 
 
-# 登陆验证
-def select_userisok(username, password):
-    db = connectdb()
-    username = "\"" + username + "\""
-    password = "\"" + password + "\""
-    # 使用cursor()方法获取操作游标
-    cursor = db.cursor()
-    sql = "SELECT root FROM  user WHERE username=" + username + "and password=" + password
-    res = {
-        'root': 0,
-        'code': 0
-    }
-    try:
-        # 执行SQL语句
-        cursor.execute(sql)
-        # 获取所有记录数量
-        num1 = cursor.fetchall()
-        print("登陆成功")
-        res = {
-            'root': num1[0][0],
-            'code': len(num1)
-        }
-        return res
-    except:
-        print("登陆失败")
-    # 上报到管理平台
-    closedb(db)
-    return res
-
-
 # 检验是否修改或添加
-def select_user_have(username):
+def select_Movie_have(title):
     db = connectdb()
-    username = "\"" + username + "\""
+    title = "\"" + title + "\""
     # 使用cursor()方法获取操作游标
     cursor = db.cursor()
-    sql = "SELECT id FROM  user WHERE username=" + username
+    sql = "SELECT id FROM  moviedb WHERE title=" + title
     try:
         # 执行SQL语句
         cursor.execute(sql)
@@ -115,15 +87,15 @@ def select_user_have(username):
 # 添加电影
 def add_Movie(Movie):
     db = connectdb()
-    title = "\"" + str(Movie.getuser_name()) + "\""
-    douban = "\"" + Movie.getuser_password() + "\""
-    uptime = "\"" + Movie.getuser_createtime() + "\""
-    country = "\"" + str(Movie.getuser_root()) + "\""
-    type = "\"" + str(Movie.getuser_sex()) + "\""
-    time_total = "\"" + str(Movie.getuser_sex()) + "\""
+    title = "\"" + Movie.getMovie_name() + "\""
+    douban = "\"" + Movie.getMovie_douban() + "\""
+    uptime = "\"" + Movie.getMovie_uptime() + "\""
+    country = "\"" + Movie.getMovie_country() + "\""
+    type = "\"" + str(Movie.getMovie_type()) + "\""
+    time_total = "\"" + str(Movie.getMovie_time_total()) + "\""
     cursor = db.cursor()
     sql = "insert into moviedb (title,douban,uptime,country,type,time_total) " + "values (" + title + "," + \
-          douban + "," + uptime + "," + country + "," + type + ","+time_total+")"
+          douban + "," + uptime + "," + country + "," + type + "," + time_total + ")"
     num = cursor.execute(sql)
     print('添加成功')
     db.commit()  # 提交数据
@@ -131,18 +103,19 @@ def add_Movie(Movie):
 
 
 # 用户信息修改
-def update_info(user):
+def update_info(Movie):
     db = connectdb()
     cursor = db.cursor()
-    id = str(user.getuser_id())
-    username = "\"" + str(user.getuser_name()) + "\""
-    password = "\"" + user.getuser_password() + "\""
-    createtime = "\"" + user.getuser_createtime() + "\""
-    root = "\"" + str(user.getuser_root()) + "\""
-    sex = "\"" + str(user.getuser_sex()) + "\""
+    title = "\"" + Movie.getMovie_name() + "\""
+    douban = "\"" + Movie.getMovie_douban() + "\""
+    uptime = "\"" + Movie.getMovie_uptime() + "\""
+    country = "\"" + Movie.getMovie_country() + "\""
+    type =str(Movie.getMovie_type())
+    id = str(Movie.getMovie_id())
+    update = "update moviedb  set  title=" + title + ",douban=" + douban + ",country=" + country + \
+             ",uptime=" + uptime + ",type=" + type + " where id=" + id
+    print(update)
     try:
-        update = "update user set  username=" + username + ",password=" + password + ",createtime=" + createtime + \
-                 ",root=" + root + ",sex=" + sex + " where id=" + id
         cursor.execute(update)
         print('信息修改成功')
         db.commit()  # 提交数据
@@ -154,13 +127,27 @@ def update_info(user):
 
 
 # 用户信息删除
-def del_user(id):
+def del_Movie(id):
     db = connectdb()
     cursor = db.cursor()
     try:
-        update = "DELETE FROM user" + " where id=" + id
+        update = "DELETE FROM moviedb" + " where id=" + id
         cursor.execute(update)
         print("删除数据成功")
+        db.commit()  # 提交数据
+    except:
+        db.rollback()
+        cursor.close()
+        db.close()
+
+# 亲空数据库
+def del_all_Movie():
+    db = connectdb()
+    cursor = db.cursor()
+    try:
+        update = "DELETE FROM moviedb" + " where id>1"
+        cursor.execute(update)
+        print("电影数据清空成功")
         db.commit()  # 提交数据
     except:
         db.rollback()
@@ -188,7 +175,4 @@ def add_type(data):
 
 
 if __name__ == '__main__':
-    type_list = ['喜剧', '爱情', '剧情', '惊悚', '动作', '奇幻', '战争', '动画', '冒险']
-    for k in type_list:
-        add_type(k)
-        time.sleep(3)
+    select_Movie("-1", "")

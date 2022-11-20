@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>电影列表</title>
+<title>用户列表</title>
 <link rel="stylesheet" href="/layui-main/dist/css/layui.css" media="all">
 </head>
 <body>
@@ -11,7 +11,7 @@
 		style="margin-top: 20px">
 		<legend>查询条件</legend>
 		<div class="layui-form" action="" method="post">
-            <div class="layui-container">
+            <f class="layui-container">
              <div class="layui-row">
                <div class="layui-col-md9">
                 	<div class="layui-form-item">
@@ -24,9 +24,9 @@
 					</div>
 				</div>
 				<div class="layui-line">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label">电影名称</label>
 					<div class="layui-input-inline">
-						<input type="text" id="username" name="username" placeholder="请输入用户名"
+						<input type="text" id="title" name="title" placeholder="请输入电影名称"
 							autocomplete="off" class="layui-input">
 					</div>
 				</div>
@@ -40,13 +40,13 @@
 					onclick="sreach()">查询</button>
 					<button type="reset"
 						class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh "
-						lay-filter="submit">重置</button>
+						onclick="isno()">重置</button>
 				</div>
 			</div>
                  </div>
                </div>
 
-			</div>
+		</div>
 	</fieldset>
 	<!-- 数据表格开始 -->
 	<div class="layui-btn-container" style="display: none;"
@@ -66,34 +66,50 @@
 		<form action="" class="layui-form" lay-filter="dateFrm" id="dateFrm">
 			<div class="layui-form-item">
 				<div class="layui-line">
-					<label class="layui-form-label">用户名</label>
+					<label class="layui-form-label">标题</label>
 					<div class="layui-input-inline">
-						<input type="text" name="username" lay-verify="required"
-							placeholder="请输入用户名" autocomplete="off" class="layui-input">
+						<input type="text" name="title" lay-verify="required"
+							placeholder="请输入电影标题" autocomplete="off" class="layui-input">
 						<!-- required lay-verify="required"验证 -->
 					</div>
 				</div>
 				<div class="layui-line">
-					<label class="layui-form-label">密码</label>
+					<label class="layui-form-label">国别</label>
 					<div class="layui-input-inline">
-						<input type="password" name="password" lay-verify="required"
-							placeholder="请输入密码" autocomplete="off" class="layui-input">
+						<input type="txt" name="country" lay-verify="required"
+							placeholder="请输入国别" autocomplete="off" class="layui-input">
 					</div>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-line">
-					<label class="layui-form-label">性别</label>
+					<label class="layui-form-label">类别</label>
 					<div class="layui-input-inline">
-						<input type="radio" name="sex" value="男" title="男" checked="checked">
-						<input type="radio" name="sex" value="女" title="女">
+						<input type="radio" name="type" value="1" title="喜剧" checked="checked">
+						<input type="radio" name="type" value="2" title="爱情" >
+						<input type="radio" name="type" value="3" title="剧情" >
+						<input type="radio" name="type" value="4" title="惊悚" >
+						<input type="radio" name="type" value="5" title="动作" >
+						<input type="radio" name="type" value="6" title="奇幻" >
+						<input type="radio" name="type" value="7" title="战争" >
+						<input type="radio" name="type" value="8" title="动画" >
+						<input type="radio" name="type" value="7" title="冒险" >
 						<!-- required lay-verify="required"验证 -->
 					</div>
 				</div>
+			</div>
+			<div class="layui-form-item">
 				<div class="layui-line">
-					<label class="layui-form-label">权限</label>
+					<label class="layui-form-label">上映时间</label>
 					<div class="layui-input-inline">
-						<input type="text" name="root" lay-verify="required"
+						<input type="text" name="uptime" lay-verify="required"
+							placeholder="请输入权限(1为普通用户，2为管理用户)" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-line">
+					<label class="layui-form-label">豆瓣评分</label>
+					<div class="layui-input-inline">
+						<input type="text" name="douban" lay-verify="required"
 							placeholder="请输入权限(1为普通用户，2为管理用户)" autocomplete="off" class="layui-input">
 					</div>
 				</div>
@@ -114,7 +130,7 @@
 	<!-- 添加和修改的弹出层代码-->
 	<script src="/layui-main/dist/layui.js"></script>
 	<script>
-		let listurl = "/admin/user_list";
+		let listurl = "/film/movie_list";
 		getdata()
 	    function getdata(){
 	    		layui.use([ 'table', 'laydate','jquery','layer','form' ], function() {
@@ -138,7 +154,7 @@
 				,
 				url : listurl //数据接口
 				,
-				title : '用户数据' //数据表格的标题
+				title : '电影数据' //数据表格的标题
 				,
 				page : true //开启分页
 				,
@@ -159,23 +175,28 @@
 					sort : true
 				} //sort 是否排序布尔值
 				, {
-					field : 'username',
-					title : '用户名'
+					field : 'title',
+					title : '电影标题'
 				}, {
-					field : 'sex',
-					title : '性别'
+					field : 'country',
+					title : '国别'
 				}, {
-					field : 'createtime',
-					title : '创建时间',
+					field : 'uptime',
+					title : '上映档期',
+					edit : true
+				},  {
+					field : 'uptime',
+					title : '年份',
 					edit : true
 				}, {
-					field : 'password',
-					title : '密码',
+					field : 'type',
+					title : '类型',
 					edit : true
 				}, {
-					field : 'root',
-					title : '权限(1为普通用户，2为管理用户)',
-					edit : true
+					field : 'douban',
+					title : '豆瓣评分',
+					edit : true,
+					sort : true
 				}, {
 					fixed : 'right',
 					title : '操作',
@@ -203,15 +224,15 @@
 				var data = obj.data; //获得当前行数据
 				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 				if (layEvent === 'edit') { //查看
-					layer.msg("修改")
+					layer.msg("信息无需展示，可在所在表数据中查看")
 				} else if (layEvent === 'del') { //删除
-					layer.confirm('真的删除行么', function(index) {
+					layer.confirm('真的删除这条数据么', function(index) {
 						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
 						layer.close(index);
 						//向服务端发送删除指令
 						$.ajax(
 								{
-									url: "http://127.0.0.1:5001/admin/del_user?id="+data.id,
+									url: "http://127.0.0.1:5001/film/del_movie?id="+data.id,
                                      data:"",
                                      contentType:'application/json;charset=utf-8',
                                      type: 'get',
@@ -235,9 +256,9 @@
 			function openAddUser() {
 			  mainIndex=layer.open({
 					type:1,
-					title:'添加用户',
+					title:'添加信息',
 					content:$("#saveOrupdate"),
-					area:['700px','300px'],
+					area:['700px','400px'],
 					success:function(index){
 						//清空数据表格
 						$('#dateFrm')[0].reset();
@@ -245,25 +266,14 @@
 					}
 				})
 			}
-			//提交重置
-			form.on("submit(doSubmit)",function(obj){
-				//序列化表单数据
-				var param=$('#dateFrm').serialize();
-				$.post(url,param,function(obj){
-					layer.msg("成功");
-					//关闭弹出层
-					layer.close(mainIndex);
-					//刷新数据表格
-					ltableIns.reload(); //回调表格数据
-				})
-			})
 			//弹出层方法 修改页面
 			function openUpdateUser(data) {
+				  console.log(data)
 				  mainIndex=layer.open({
 					type:1,
-					title:'修改用户',
+					title:'修改信息',
 					content:$("#saveOrupdate"),
-					area:['700px','300px'],
+					area:['700px','400px'],
 					success:function(index){
 						form.val('dateFrm',data);
 						url='date/update/updateUser';
@@ -275,11 +285,31 @@
 		      //查询
 		function sreach(){
 			const id = document.getElementById("ids").value;
-			const username = document.getElementById("username").value;
-			listurl = "/admin/sreach_list?id="+id+"&&username="+username
+			const title = document.getElementById("title").value;
+			listurl = "/film/sreach_list?id="+id+"&&title="+title
 			//刷新数据表格
 			console.log(listurl)
 			getdata()
+		}
+
+				//提交重置
+		  form.on("submit(doSubmit)",function(obj){
+				//序列化表单数据
+				var param=$('#dateFrm').serialize();
+				$.post(url,param,function(obj){
+					layer.msg("成功");
+					//关闭弹出层
+					layer.close(mainIndex);
+					//刷新数据表格
+					ltableIns.reload(); //回调表格数据
+				})
+			})
+
+		function isno(){
+			let id = document.getElementById("ids");
+			let username = document.getElementById("username");
+			id.value = ""
+			username.value =""
 		}
 	</script>
 </body>

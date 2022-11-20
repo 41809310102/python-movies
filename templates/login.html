@@ -112,6 +112,12 @@
                      }else{
                          window.sessionStorage.setItem( "root" , "2" );
                      }
+                         console.log(data.data.user)
+                         window.sessionStorage.setItem( "username" , data.data.username);
+                         window.sessionStorage.setItem( "sex" , data.data.sex);
+                         window.sessionStorage.setItem( "createtime" , data.data.createtime);
+                         window.sessionStorage.setItem( "sign" , data.data.sign);
+                         window.sessionStorage.setItem( "id" , data.data.id);
                          window.location.href = "http://127.0.0.1:5001/lay.html" ;
                   }else{
                       alert(data.msg)

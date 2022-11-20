@@ -8,9 +8,13 @@ class User(object):
         self.sex = ""
         self.root = 1
         self.createtime = ""
+        self.sign = ""
 
     def getuser_id(self):
         return self.id
+
+    def getuser_sign(self):
+        return self.sign
 
     def getuser_name(self):
         return self.username
@@ -44,3 +48,6 @@ class User(object):
 
     def setuser_createtime(self, value):
         self.createtime = value
+
+    def setuser_sign(self, value):
+        self.sign = value
