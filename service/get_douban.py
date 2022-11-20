@@ -176,7 +176,7 @@ def getcloud_chart():
     for s in data:
         text += s+"\n"
     w.generate(text)
-    w.to_file("pywcloud.png")
+    w.to_file("../static/img/doubanTop10cloud.png")
 
 
 # 豆瓣电影程序入口（主方法）
