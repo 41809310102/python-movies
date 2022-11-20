@@ -6,7 +6,7 @@ class User(object):
         self.username = ""
         self.password = ""
         self.sex = ""
-        self.root = ""
+        self.root = 1
         self.createtime = ""
 
     def getuser_id(self):
@@ -43,4 +43,4 @@ class User(object):
         self.root = value
 
     def setuser_createtime(self, value):
-        self.root = value
+        self.createtime = value

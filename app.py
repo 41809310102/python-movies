@@ -67,7 +67,6 @@ def get_mov_type():
            '动画': data_count[7],
            '冒险': data_count[8]}
     # Address = Count_Flag_And_Flow("d://access_log")
-    print(res)
     return render_template("mydata.html", data=json.dumps(res))
 
 
@@ -238,4 +237,4 @@ def register():
 
 if __name__ == '__main__':
     app.register_blueprint(api_url_user, url_prefix='/admin')
-    app.run()
+    app.run('0.0.0.0', port=5001, debug=False)

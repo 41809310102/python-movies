@@ -9,61 +9,48 @@
     <script src="https://cdn.lyshark.com/javascript/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/layui-main/dist/css/layui.css">
     <script src="/layui-main/dist/layui.js"></script>
+<!--    <link rel="stylesheet" href="../static/layui-main/dist/css/layui.css">-->
+<!--    <script src="../static/layui-main/dist/layui.js"></script>-->
 </head>
 <body>
     <div class="layui-layout-admin">
         <!--头部-->
         <div class="layui-header">
-            <div class="layui-logo">Huang BaoKang</div>
+            <div class="layui-logo">电影网络数据管理系统</div>
             <ul class="layui-nav layui-layout-left">
-                <li class="layui-nav-item"><a href="javascript:void(0)">控制台</a></li>
-                <li class="layui-nav-item"><a href="javascript:;">商品管理</a></li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">其他系统</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">邮件管理</a></dd>
-                        <dd><a href="javascript:;">消息管理</a></dd>
-                        <dd><a href="javascript:;">授权管理</a></dd>
-                    </dl>
-                </li>
+                 <li class="layui-nav-item"><a href="javascript:void(0)" data-src="https://movie.douban.com">豆瓣电影</a></li>
+                 <li class="layui-nav-item"><a href="javascript:;" data-src="https://m.dytt8.net/index2.htm">电影天堂</a></li>
+                 <li class="layui-nav-item"><a href="javascript:;" data-src="https://www.citydy.com">城市电影</a></li>
             </ul>
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
-                    <a href=""><img src="http://m.zhengjinfan.cn/images/0.jpg" class="layui-nav-img">Huang BaoKang</a>
+<!--                    <a href=""><img src="../static/img/user__easyico.png" class="layui-nav-img">个人中心</a>-->
+                    <a href=""><img src="/img/user__easyico.png" class="layui-nav-img">个人中心</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">安全设置</a></dd>
+                        <dd><a href="javascript:;" data-src="/admin/myinfo">我的信息</a></dd>
+                        <dd><a href="javascript:;" onclick="exit()">退出系统</a></dd>
                     </dl>
                 </li>
             </ul>
         </div>
-
         <!--左侧-->
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
                 <ul class="layui-nav layui-nav-tree" lay-filter="hbkNavbar">
                     <li class="layui-nav-item">
-                        <a href="javascript:;">基本元素</a>
+                        <a href="javascript:;" id="user-admin">用户管理</a>
                         <dl class="layui-nav-child">
-                            <dd lay-id="111"><a href="javascript:;" data-src="/tostudentlist">表格</a></dd>
-                            <dd><a href="">表单</a></dd>
-                            <dd><a href="">导航栏</a></dd>
-                        </dl>
-                    </li>
-                    <li class="layui-nav-item layui-nav-itemed">
-                        <a href="">组件</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="javascript:;"  data-src="/chart/mydata">数据可视化</a></dd>
-                            <dd><a href="">Tab</a></dd>
-                            <dd><a href="">OneLevel</a></dd>
-                            <dd><a href="">app.js主入口</a></dd>
+                            <dd lay-id="111"><a href="javascript:;"  data-src="/admin/list?username=null">
+                                用户列表</a></dd>
                         </dl>
                     </li>
                     <li class="layui-nav-item">
-                        <a href="" >表格</a>
-                    </li>
-                    <li class="layui-nav-item">
-                        <a href="">表单</a>
+                        <a href="javascript:;">电影数据</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;"  data-src="/chart/mydata">数据分析</a></dd>
+                            <dd><a href="javascript:;"  data-src="/admin/list?username=null">电影列表</a></dd>
+                              <dd><a href="javascript:;" >数据爬取</a></dd>
+                        </dl>
                     </li>
                 </ul>
             </div>
@@ -72,7 +59,8 @@
           <!--中间主体-->
         <div class="layui-body" id="container">
          <div class="main_right">
-         <iframe frameborder="0" scrolling="yes" style="width: 100%" height="100%" src="" id="aa">
+             <div style="margin-top: 0px"></div>
+         <iframe frameborder="0" scrolling="yes" style="width: 100%;height: 800px"  src="https://movie.douban.com" id="aa">
     </iframe>
 </div>
 
@@ -85,6 +73,16 @@
         </div>
     </div>
 <script>
+    isroot()
+    function isroot(){
+        console.log(window.sessionStorage.getItem( "root" ))
+        if(window.sessionStorage.getItem( "root" )=="1"){
+              document.getElementById("user-admin").style.display="none"; //隐藏
+        }
+    }
+    function exit(){
+        top.location.href = "http://127.0.0.1:5001/";
+    }
     //JavaScript代码区域
      $(function(){
  		//获取src值
@@ -92,10 +90,15 @@
             var address =$(this).attr("data-src");
             $("iframe").attr("src",address);
         });
+
+          $(".layui-nav-item a").on("click",function(){
+            var address =$(this).attr("data-src");
+            $("iframe").attr("src",address);
+        });
 		//一下代码是根据窗口高度在设置iframe的高度
         var frame = $("#aa");
 
-        var frameheight = $(window).height();
+        // var frameheight = $(window).height();
         console.log(frameheight);
         frame.css("height",frameheight);
     });

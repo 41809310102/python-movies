@@ -1,5 +1,4 @@
 # 2. 爬取电影天堂 主页中的 最新发布180部影视 的每一部电影的详细信息
-import json
 
 import requests
 from lxml import etree
@@ -13,7 +12,8 @@ Movie_url = []
 flag = ['奥斯卡', '金球奖', '金鸡奖', '百花奖', '金马奖', '香港电影金像奖', '柏林电影节金熊奖']
 # User-Agent
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/97.0.4692.71 Safari/537.36',
     'Referer': 'https://www.dytt8.net'
 }
 

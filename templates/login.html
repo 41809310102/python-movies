@@ -8,7 +8,7 @@
     <script src="https://cdn.lyshark.com/javascript/echarts/5.0.0/echarts.min.js"></script>
     <title>Document</title>
     <style>
-        * {
+           * {
             margin: 0;
             padding: 0;
         }
@@ -20,7 +20,7 @@
         }
         .container {
             height: 100%;
-            background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            background-image: linear-gradient(to right, #2f279e, #a6c1ee);
         }
         .login-wrapper {
             background-color: #fff;
@@ -57,7 +57,7 @@
             padding: 10px;
             width: 100%;
             margin-top: 40px;
-            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            background-image: linear-gradient(to right, #a6c1ee, #2676bb);
             color: #fff;
         }
         .msg {
@@ -73,15 +73,15 @@
 <body>
     <div class="container">
         <div class="login-wrapper">
-            <div class="header">Login</div>
+            <div class="header">用户登陆</div>
             <div class="form-wrapper">
                 <input type="text" id="username" placeholder="username" class="input-item">
                 <input type="password" id="password" placeholder="password" class="input-item">
-                <div class="btn" onclick="selectValue()">Login</div>
+                <div class="btn" onclick="selectValue()">点击登陆</div>
             </div>
             <div class="msg" onclick="go_chart()">
-                Don't have account?
-                <a href="#">Sign up</a>
+                没有账号?
+                <a href="#">去注册</a>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@
 <script>
        //进入数据分析页面
        function go_chart(){
-        top.location.href = "http://127.0.0.1:5000/register";
+        top.location.href = "http://127.0.0.1:5001/register";
         }
         //用户登陆
         function selectValue() {
@@ -100,25 +100,26 @@
          var password = document.getElementById("password").value;
         //窗口弹出input文本框输入的值
             $.ajax({
-              url: "http://127.0.0.1:5000/admin/login?username="+username+"&&password="+password,
+              url: "http://127.0.0.1:5001/admin/login?username="+username+"&&password="+password,
               data:"",
               contentType:'application/json;charset=utf-8',
               type: 'get',
               dataType: 'json',
              success(data){
-                  if(data.code==0){
-                      alert("登陆成功")
-                        top.location.href = "http://127.0.0.1:5000//chart/mydata";
+                  if(data.code==1){
+                     if(data.data.root=='1'){
+                         window.sessionStorage.setItem( "root" , "1" );
+                     }else{
+                         window.sessionStorage.setItem( "root" , "2" );
+                     }
+                         window.location.href = "http://127.0.0.1:5001/lay.html" ;
                   }else{
-                      alert("登陆失败")
+                      alert(data.msg)
                   }
               }
           })
 
     }
-
-
-
 
 </script>
 </html>
